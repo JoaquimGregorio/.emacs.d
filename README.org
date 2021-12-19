@@ -1,3 +1,1 @@
-* .emacs.d
-** My personal emacs setup from scratch
 #+setupfile: config.org

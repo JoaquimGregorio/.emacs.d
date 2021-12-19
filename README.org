@@ -1,1 +1,1 @@
-#+setupfile: config.org
+#+INCLUDE: "config.org"

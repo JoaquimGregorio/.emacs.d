@@ -1,3 +1,17 @@
 elpa/
 auto-save-list/
 eshell/
+eclipse.jdt.ls/
+workspace/
+snippets/
+projectile-bookmarks.eld
+.lsp-session*
+.extension/
+emojis/
+var/
+.dap-breakpoints
+.cache/
+.last-package-update-day
+recentf*
+transient/
+config.el

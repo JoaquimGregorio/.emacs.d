@@ -4,7 +4,7 @@
 #+STARTUP: overview
 
 * Important! Put this in your init.el 
-For the first time you must save **config.org** file to be generated a **config.el** file. Since the auto-tangle is enabled, any change you do in the **config.org** file will rewrite the **config.el** file.
+For the first time you must save *config.org* file to be generated a *config.el* file. Since the auto-tangle is enabled, any change you do in the *config.org* file will rewrite the *config.el* file.
 #+begin_example emacs-lisp
 (defconst dot-emacs (concat (getenv "HOME") "/.emacs.d/" "config.el")
     "My dot emacs file")

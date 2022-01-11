@@ -1,6 +1,6 @@
 ** Clone this repository in your home directory.
-#+begin_example sh
+#+begin_src sh
 git clone https://github.com/JoaquimGregorio/.emacs.d
-#+end_example
+#+end_src
 ** Settings are made by editing the [[https://github.com/JoaquimGregorio/.emacs.d/blob/main/config.org][config.org]] file.
 ** That's all.

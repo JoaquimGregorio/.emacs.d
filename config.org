@@ -4,6 +4,7 @@
 #+STARTUP: overview
 
 * Important! Put this in your init.el 
+For the first time you must save **config.org** file to be generated a **config.el** file. Since the auto-tangle is enabled, any change you do in the **config.org** file will rewrite the **config.el** file.
 #+begin_example emacs-lisp
 (defconst dot-emacs (concat (getenv "HOME") "/.emacs.d/" "config.el")
     "My dot emacs file")
@@ -23,7 +24,7 @@
 #+end_example
 * Load First
 ** Startup performance
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; The default is 800 kilobytes. Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -38,7 +39,7 @@
 
 #+end_src
 ** Initialize Package Sources 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Initialize package sources
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -58,7 +59,7 @@
 
 ** Evil Mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package evil
     :init      ;; tweak evil's configuration before loading it
     (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
@@ -71,7 +72,7 @@
 
 * UI
 ** Centaur tabs
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package centaur-tabs
   :demand
   :config
@@ -88,7 +89,7 @@
 #+end_src
 ** Font Configuration
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (set-face-attribute 'default nil :font "JetBrainsMono NF" :height 100)
 
   ;; Set the fixed pitch face
@@ -103,7 +104,7 @@
 
 ** Ui Improvements
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; (setq inhibit-startup-message t) ; don't show startup screen
   (scroll-bar-mode -1) ; Disable visible scrollbar
   (tool-bar-mode -1) ; Disable the toolbar
@@ -142,7 +143,7 @@
   #+end_src
 
 ** Theme
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Set up some theme
 (use-package doom-themes
   :ensure t
@@ -163,7 +164,7 @@
   (doom-themes-org-config))
 #+end_src
 *** Doom
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package all-the-icons)
 
   ;; Doom mode line
@@ -172,7 +173,7 @@
 #+end_src
 
 ** Yafolding
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package yafolding)
   (defvar yafolding-mode-map
   (let ((map (make-sparse-keymap)))
@@ -185,7 +186,7 @@
 Org Mode is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 ** Better Font Faces
 The efs/org-font-setup function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we’re editing a document in org-mode. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
- #+begin_src emacs-lisp
+ #+begin_src emacs-lisp :tangle yes
    (defun efs/org-font-setup ()
    ;; Replace list hyphen with dot
    (font-lock-add-keywords 'org-mode
@@ -222,7 +223,7 @@ The efs/org-font-setup function configures various text faces to tweak the sizes
 #+end_src
 ** Basic Config
 This section contains the basic configuration for org-mode plus the configuration for Org agendas and capture templates. There’s a lot to unpack in here so I’d recommend watching the videos for Part 5 and Part 6 for a full explanation.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org
   :pin org
   :commands (org-capture org-agenda)
@@ -349,7 +350,7 @@ This section contains the basic configuration for org-mode plus the configuratio
  #+end_src
 ** Nicer Heading Bullets
 org-bullets replaces the heading stars in org-mode buffers with nicer looking characters that you can control. Another option for this is org-superstar-mode which we may cover in a later video.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
   ;; :custom
@@ -358,7 +359,7 @@ org-bullets replaces the heading stars in org-mode buffers with nicer looking ch
 ** Center Org Buffers
 
 We use visual-fill-column to center org-mode buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document. This is really a matter of personal preference so you can remove the block below if you don’t like the behavior.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (defun efs/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
@@ -369,7 +370,7 @@ We use visual-fill-column to center org-mode buffers for a more pleasing writing
 #+end_src
 ** Configure Babel Languages
 To execute or export code in org-mode code blocks, you’ll need to set up org-babel-load-languages for each language you’d like to use. This page documents all of the languages that you can use with org-babel.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (with-eval-after-load 'org
   (org-babel-do-load-languages
       'org-babel-load-languages
@@ -382,7 +383,7 @@ To execute or export code in org-mode code blocks, you’ll need to set up org-b
 Org Mode’s structure templates feature enables you to quickly insert code blocks into your Org files in combination with org-tempo by typing < followed by the template name like el or py and then press TAB. For example, to insert an empty emacs-lisp block below, you can type <el and press TAB to expand into such a block.
 
 You can add more src block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language as it is known by Org Babel.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (with-eval-after-load 'org
   ;; This is needed as of Org 9.2
   (require 'org-tempo)
@@ -396,7 +397,7 @@ You can add more src block templates below by copying one of the lines and chang
 #+end_src
 ** Auto-tangle Configuration Files
 This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config gets executed each time such a buffer gets saved. This function checks to see if the file being saved is the Emacs.org file you’re looking at right now, and if so, automatically exports the configuration here to the associated output files.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (file-name-directory (buffer-file-name))
@@ -409,7 +410,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 #+end_src
 * Keybindings
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 ;; Adjust text scale
@@ -422,7 +423,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 
 * Ivy
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
     ;; Use Ivy and Counsel for completions
     (use-package ivy
       :diminish
@@ -476,7 +477,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 #+end_src
 
 * Which key
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; Which key
   (use-package which-key
     :init (which-key-mode)
@@ -487,7 +488,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 * Usefull Plugins
 ** Helpful
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package helpful
     :ensure t
     :custom
@@ -502,7 +503,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 
 * Tree-sitter
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package tree-sitter-langs)
 (use-package tree-sitter
   :config
@@ -515,7 +516,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
   With above setup done, below we will setup several packages closely related to LSP.
 ** Run Code
 We can use quickrun package to execute code (if it has main). E.g. If you have a java file with main method, it will run with the associated shortcut key ~C-c r~ or quickrun command. Quickrun has support for several languages.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package quickrun 
 :ensure t
 :bind ("C-c r" . quickrun))
@@ -524,7 +525,7 @@ We can use quickrun package to execute code (if it has main). E.g. If you have a
 ** Yasnippet
 Yasnippet is a template system for Emacs. It allows you to type abbreviation and complete the associated text.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package yasnippet :config (yas-global-mode))
 (use-package yasnippet-snippets :ensure t)
 #+end_src
@@ -535,7 +536,7 @@ To create a new snippet you can use ~yas-new-snippet~ command.
 
 ** Treemacs
 Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and its dependency treemacs. We will also Assign ~M-9~ to show error list.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package lsp-treemacs
     :after (lsp-mode treemacs)
     :ensure t
@@ -556,7 +557,7 @@ Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and it
 
 ** LSP UI
 lsp-ui is a set of UI enhancements built on top of lsp-mode which make Emacs feel even more like an IDE. Check out the screenshots on the lsp-ui homepage (linked at the beginning of this paragraph) to see examples of what it can do.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :custom
@@ -564,14 +565,14 @@ lsp-ui is a set of UI enhancements built on top of lsp-mode which make Emacs fee
 
 #+end_src
 ** Ivy
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package lsp-ivy
   :after lsp)
 #+end_src
 ** Dap Mode
 Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package dap-mode
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
   ;; :custom
@@ -587,7 +588,7 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
 
 ** Company
 Complete anything aka Company provides auto-completion. Company-capf is enabled by default when you start LSP on a project. You can also invoke ~M-x company-capf~ to enable capf (completion at point function).
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package company
   :after lsp-mode
   :hook (lsp-mode . company-mode)
@@ -605,7 +606,7 @@ Complete anything aka Company provides auto-completion. Company-capf is enabled 
 
 ** Projectile
 Projectile is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages. Many packages integrate with Projectile so it’s a good idea to have it installed even if you don’t use its commands directly.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package projectile
     :diminish projectile-mode
     :config (projectile-mode)
@@ -627,7 +628,7 @@ Projectile is a project management library for Emacs which makes it a lot easier
   
 ** Magit
 Magit is the best Git interface I’ve ever used. Common Git operations are easy to execute quickly using Magit’s command panel system.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package magit
     :commands magit-status
     :custom
@@ -641,20 +642,20 @@ Magit is the best Git interface I’ve ever used. Common Git operations are easy
 #+end_src
 ** Commenting
 Emacs’ built in commenting functionality comment-dwim (usually bound to M-;) doesn’t always comment things in the way you might expect so we use evil-nerd-commenter to provide a more familiar behavior. I’ve bound it to M-/ since other editors sometimes use this binding but you could also replace Emacs’ M-; binding with this command.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package evil-nerd-commenter
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 #+end_src
 ** Rainbow Delimiters
 rainbow-delimiters is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth. This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 ** Install LSP Package
 Let's install the main package for lsp. Here we will integrate lsp with which-key. This way, when we type the prefix key ~C-c l~ we get additional help for compliting the command. 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package lsp-mode
     :init
     (setq lsp-keymap-prefix "C-l") ;; or "C-c l", "s-l"
@@ -668,7 +669,7 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 
 ** Emmet mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package emmet-mode)
   (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -676,7 +677,7 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 
 ** Languages
 *** Angular
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package lsp-mode :hook (angular-ls . lsp-deferred))
 #+end_src
 *** Java
@@ -692,7 +693,7 @@ This is the package that handles server installation and session management.
 #+end_src** Java
   
 *** Typescript
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package typescript-mode
     :mode "\\.ts\\'"
     :hook (typescript-mode . lsp-deferred)
@@ -701,16 +702,16 @@ This is the package that handles server installation and session management.
   (require 'dap-firefox) ;; to load the dap adapter for your language
 #+end_src 
 *** HTML
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package lsp-mode :hook (html-ls . lsp-deferred))
 #+end_src
 *** CSS/LessCSS/SASS/SCSS
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package lsp-mode :hook (css-ls . lsp-deferred))
 #+end_src
 
 *** Rust
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package rust-mode
     :config (setq rust-format-on-save t))
   (add-hook 'rust-mode-hook (lambda () (setq indent-tabs-mode nil)))
@@ -734,7 +735,7 @@ Run a terminal with =M-x term!=
 - =C-c C-j= - Return to line-mode
 - If you have =evil-collection= installed, =term-mode= will enter char mode when you use Evil's Insert mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 
   (use-package term
     :commands term
@@ -750,7 +751,7 @@ Run a terminal with =M-x term!=
 
 The =eterm-256color= package enhances the output of =term-mode= to enable handling of a wider range of color codes so that many popular terminal applications look as you would expect them to.  Keep in mind that this package requires =ncurses= to be installed on your machine so that it has access to the =tic= program.  Most Linux distributions come with this program installed already so you may not have to do anything extra to use it.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 
   (use-package eterm-256color
     :hook (term-mode . eterm-256color-mode))
@@ -763,7 +764,7 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
 
 Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirements][necessary dependencies]] installed before trying to use =vterm= because there is a module that will need to be compiled before you can use it successfully.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 
   (use-package vterm
     :commands vterm
@@ -839,7 +840,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 *** Configuration
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 
   (use-package dired
     :ensure nil
@@ -866,7 +867,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 Dial the GC threshold back down so that garbage collection happens more frequently but in less time.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 
   ;; Make gc pauses faster by decreasing the threshold.
   (setq gc-cons-threshold (* 2 1000 1000))

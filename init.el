@@ -13,3 +13,5 @@
 (add-hook 'kill-emacs-hook
           '(lambda () (and (file-newer-than-file-p dot-emacs compiled-dot-emacs)
                            (byte-compile-file dot-emacs))))
+
+(setq message-log-max t)

@@ -21,6 +21,8 @@ For the first time you must save *config.org* file to be generated a *config.el*
 (add-hook 'kill-emacs-hook
           '(lambda () (and (file-newer-than-file-p dot-emacs compiled-dot-emacs)
                            (byte-compile-file dot-emacs))))
+
+(setq message-log-max t)
 #+end_example
 * Load First
 ** Startup performance
@@ -29,11 +31,11 @@ For the first time you must save *config.org* file to be generated a *config.el*
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (defun efs/display-startup-time ()
-  (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
-                   (float-time
-                     (time-subtract after-init-time before-init-time)))
-           gcs-done))
+(message "Emacs loaded in %s with %d garbage collections."
+        (format "%.2f seconds"
+                (float-time
+                    (time-subtract after-init-time before-init-time)))
+        gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
@@ -43,15 +45,15 @@ For the first time you must save *config.org* file to be generated a *config.el*
 ;; Initialize package sources
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
+                        ("org" . "https://orgmode.org/elpa/")
+                        ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 (unless package-archive-contents
-  (package-refresh-contents))
+(package-refresh-contents))
 
 ;; Initialize use-package on non-linux platforms
 (unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -60,32 +62,138 @@ For the first time you must save *config.org* file to be generated a *config.el*
 ** Evil Mode
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package evil
-    :init      ;; tweak evil's configuration before loading it
-    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-    (setq evil-want-keybinding nil)
-    (setq evil-vsplit-window-right t)
-    (setq evil-split-window-below t)
-    (evil-mode))
-  (use-package evil-tutor)
+(use-package evil
+:init      ;; tweak evil's configuration before loading it
+(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+(setq evil-want-keybinding nil)
+(setq evil-vsplit-window-right t)
+(setq evil-split-window-below t)
+(evil-mode))
+(use-package evil-tutor)
 #+end_src
 
 * UI
+** Dashboard
+#+begin_src emacs-lisp :tangle yes
+;; If the dashboard doesn`t word after init, create ~/Org/{Tasks.org,Birthdays.org,Habits.org} files
+(use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-items '((recents  . 4)
+                    (bookmarks . 2)
+                    (projects . 2)
+                    (agenda . 2)
+                    (registers . 1)))
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-show-shortcuts nil)
+  (dashboard-setup-startup-hook))
+#+end_src
 ** Centaur tabs
 #+begin_src emacs-lisp :tangle yes
-(use-package centaur-tabs
-  :demand
-  :config
-    (setq centaur-tabs-style "bar"
-          centaur-tabs-set-bar 'over
-          centaur-tabs-set-icons t
-          centaur-tabs-gray-out-icons 'buffer
-          centaur-tabs-height 20
-          centaur-tabs-set-modified-marker t)
-    (centaur-tabs-mode t)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward))
+  (use-package centaur-tabs
+    :config
+       (setq centaur-tabs-style "bar"
+              centaur-tabs-height 24
+              centaur-tabs-set-icons t
+              centaur-tabs-set-modified-marker t
+              centaur-tabs-close-button "✕"
+              centaur-tabs-modified-marker "•"
+              centaur-tabs-set-bar 'over
+              x-underline-at-descent-line t)
+       (centaur-tabs-headline-match)
+       ;; (setq centaur-tabs-gray-out-icons 'buffer)
+       ;; (centaur-tabs-enable-buffer-reordering)
+       ;; (setq centaur-tabs-adjust-buffer-order t)
+       (centaur-tabs-mode t)
+       (setq uniquify-separator "/")
+       (setq uniquify-buffer-name-style 'forward)
+       (defun centaur-tabs-buffer-groups ()
+         "`centaur-tabs-buffer-groups' control buffers' group rules.
+
+     Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+     All buffer name start with * will group to \"Emacs\".
+     Other buffer group by `centaur-tabs-get-group-name' with project name."
+         (list
+          (cond
+            ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
+            ;; "Remote")
+            ((or (string-equal "*" (substring (buffer-name) 0 1))
+                 (memq major-mode '(magit-process-mode
+                                    magit-status-mode
+                                    magit-diff-mode
+                                    magit-log-mode
+                                    magit-file-mode
+                                    magit-blob-mode
+                                    magit-blame-mode
+                                    )))
+             "Emacs")
+            ((derived-mode-p 'prog-mode)
+             "Editing")
+            ((derived-mode-p 'dired-mode)
+             "Dired")
+            ((memq major-mode '(helpful-mode
+                                help-mode))
+             "Help")
+            ((memq major-mode '(org-mode
+                                org-agenda-clockreport-mode
+                                org-src-mode
+                                org-agenda-mode
+                                org-beamer-mode
+                                org-indent-mode
+                                org-bullets-mode
+                                org-cdlatex-mode
+                                org-agenda-log-mode
+                                diary-mode))
+             "OrgMode")
+            (t
+             (centaur-tabs-get-group-name (current-buffer))))))
+       :hook
+       (dashboard-mode . centaur-tabs-local-mode)
+       (term-mode . centaur-tabs-local-mode)
+       (calendar-mode . centaur-tabs-local-mode)
+       (org-agenda-mode . centaur-tabs-local-mode)
+       (helpful-mode . centaur-tabs-local-mode)
+       :bind
+       ("C-<prior>" . centaur-tabs-backward)
+       ("C-<next>" . centaur-tabs-forward)
+       ("C-c t s" . centaur-tabs-counsel-switch-group)
+       ("C-c t p" . centaur-tabs-group-by-projectile-project)
+       ("C-c t g" . centaur-tabs-group-buffer-groups)
+       (:map evil-normal-state-map
+              ("g t" . centaur-tabs-forward)
+              ("g T" . centaur-tabs-backward)))
+
+    (global-set-key (kbd "C-x t e") #'centaur-tabs-mode)
+#+end_src
+** hl-todo
+#+begin_src emacs-lisp :tangle yes
+  (use-package hl-todo
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(;; For things that need to be done, just not today.
+            ("TODO" warning bold)
+            ;; For problems that will become bigger problems later if not
+            ;; fixed ASAP.
+            ("FIXME" error bold)
+            ;; For tidbits that are unconventional and not intended uses of the
+            ;; constituent parts, and may break in a future update.
+            ("HACK" font-lock-constant-face bold)
+            ;; For things that were done hastily and/or hasn't been thoroughly
+            ;; tested. It may not even be necessary!
+            ("REVIEW" font-lock-keyword-face bold)
+            ;; For especially important gotchas with a given implementation,
+            ;; directed at another user other than the author.
+            ("NOTE" success bold)
+            ;; For things that just gotta go and will soon be gone.
+            ("DEPRECATED" font-lock-doc-face bold)
+            ;; For a known bug that needs a workaround
+            ("BUG" error bold)
+            ;; For warning about a problematic or misguiding code
+            ("XXX" font-lock-constant-face bold))))
+
+(global-hl-todo-mode)
 #+end_src
 ** Font Configuration
 
@@ -660,9 +768,10 @@ Let's install the main package for lsp. Here we will integrate lsp with which-ke
     :init
     (setq lsp-keymap-prefix "C-l") ;; or "C-c l", "s-l"
     :hook ((typescript-mode . lsp-deferred)
-	   (lsp-mode . lsp-enable-which-key-integration))
+           (lsp-mode . lsp-enable-which-key-integration))
     :config (setq lsp-completion-enable-additional-text-edit nil)
     :commands (lsp lsp-deferred))
+(lsp-headerline-breadcrumb-mode nil)
 #+end_src 
 
 You can start LSP server in a java project by using ~C-c l s s~. Once you type ~C-c l~ ~which-key~ package should guide you through rest of the options. In above setting I have added some memory management settings as suggested in [[https://emacs-lsp.github.io/lsp-mode/page/performance/][this guide]]. Change them to higher numbers, if you find *lsp-mode* sluggish in your computer.
@@ -670,9 +779,9 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 ** Emmet mode
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package emmet-mode)
-  (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-  (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(use-package emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 #+end_src
 
 ** Languages
@@ -682,14 +791,13 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 #+end_src
 *** Java
 This is the package that handles server installation and session management.
-#+begin_src  emacs-lisp
-(use-package lsp-java :config (add-hook 'java-mode-hook 'lsp))
-(require 'dap-java)
-#+end_src** Java
-**** Gradle mode
-#+begin_src  emacs-lisp
-(use-package gradle-mode
-  :init (gradle-mode 1))
+#+begin_src emacs-lisp :tangle yes
+(use-package gradle-mode)
+(use-package lsp-java
+  :config
+  (add-hook 'java-mode-hook 'lsp)
+  (require 'dap-java)
+  (gradle-mode 1))
 #+end_src** Java
   
 *** Typescript
@@ -698,8 +806,8 @@ This is the package that handles server installation and session management.
     :mode "\\.ts\\'"
     :hook (typescript-mode . lsp-deferred)
     :config
-    (setq typescript-indent-level 2))
-  (require 'dap-firefox) ;; to load the dap adapter for your language
+    (setq typescript-indent-level 2)
+    (require 'dap-firefox)) ;; to load the dap adapter for your language
 #+end_src 
 *** HTML
 #+begin_src emacs-lisp :tangle yes
@@ -773,94 +881,6 @@ Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirem
     (setq vterm-shell "fish")                       ;; Set this to customize the shell to launch
     (setq vterm-max-scrollback 10000))
 
-#+end_src
-
-* File Management
-** Dired
-
-Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
-
-*** Key Bindings
-
-**** Navigation
-
-*Emacs* / *Evil*
-- =n= / =j= - next line
-- =p= / =k= - previous line
-- =j= / =J= - jump to file in buffer
-- =RET= - select file or directory
-- =^= - go to parent directory
-- =S-RET= / =g O= - Open file in "other" window
-- =M-RET= - Show file in other window without focusing (previewing files)
-- =g o= (=dired-view-file=) - Open file but in a "preview" mode, close with =q=
-- =g= / =g r= Refresh the buffer with =revert-buffer= after changing configuration (and after filesystem changes!)
-
-**** Marking files
-
-- =m= - Marks a file
-- =u= - Unmarks a file
-- =U= - Unmarks all files in buffer
-- =* t= / =t= - Inverts marked files in buffer
-- =% m= - Mark files in buffer using regular expression
-- =*= - Lots of other auto-marking functions
-- =k= / =K= - "Kill" marked items (refresh buffer with =g= / =g r= to get them back)
-- Many operations can be done on a single file if there are no active marks!
-
-**** Copying and Renaming files
-
-- =C= - Copy marked files (or if no files are marked, the current file)
-- Copying single and multiple files
-- =U= - Unmark all files in buffer
-- =R= - Rename marked files, renaming multiple is a move!
-- =% R= - Rename based on regular expression: =^test= , =old-\&=
-
-*Power command*: =C-x C-q= (=dired-toggle-read-only=) - Makes all file names in the buffer editable directly to rename them!  Press =Z Z= to confirm renaming or =Z Q= to abort.
-
-**** Deleting files
-
-- =D= - Delete marked file
-- =d= - Mark file for deletion
-- =x= - Execute deletion for marks
-- =delete-by-moving-to-trash= - Move to trash instead of deleting permanently
-
-**** Creating and extracting archives
-
-- =Z= - Compress or uncompress a file or folder to (=.tar.gz=)
-- =c= - Compress selection to a specific file
-- =dired-compress-files-alist= - Bind compression commands to file extension
-
-**** Other common operations
-
-- =T= - Touch (change timestamp)
-- =M= - Change file mode
-- =O= - Change file owner
-- =G= - Change file group
-- =S= - Create a symbolic link to this file
-- =L= - Load an Emacs Lisp file into Emacs
-
-*** Configuration
-
-#+begin_src emacs-lisp :tangle yes
-
-  (use-package dired
-    :ensure nil
-    :commands (dired dired-jump)
-    :bind (("C-x C-j" . dired-jump))
-    :custom ((dired-listing-switches "-agho --group-directories-first")))
-
-  (use-package dired-single
-    :commands (dired dired-jump))
-
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
-
-  (use-package dired-open
-    :commands (dired dired-jump)
-    :config
-    ;; Doesn't work as expected!
-    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-    (setq dired-open-extensions '(("png" . "feh")
-                                  ("mkv" . "mpv"))))
 #+end_src
 
 * Runtime Performance

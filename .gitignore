@@ -16,3 +16,4 @@ recentf*
 transient/
 config.el
 config.elc
+forge-database.sqlite

@@ -153,7 +153,9 @@ For the first time you must save *config.org* file to be generated a *config.el*
        :hook
        (dashboard-mode . centaur-tabs-local-mode)
        (term-mode . centaur-tabs-local-mode)
+       (vterm-mode . centaur-tabs-local-mode)
        (calendar-mode . centaur-tabs-local-mode)
+       (org-mode . centaur-tabs-local-mode)
        (org-agenda-mode . centaur-tabs-local-mode)
        (helpful-mode . centaur-tabs-local-mode)
        :bind

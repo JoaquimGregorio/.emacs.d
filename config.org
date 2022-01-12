@@ -766,14 +766,16 @@ rainbow-delimiters is useful in programming modes because it colorizes nested pa
 Let's install the main package for lsp. Here we will integrate lsp with which-key. This way, when we type the prefix key ~C-c l~ we get additional help for compliting the command. 
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package lsp-mode
-    :init
-    (setq lsp-keymap-prefix "C-l") ;; or "C-c l", "s-l"
-    :hook ((typescript-mode . lsp-deferred)
-           (lsp-mode . lsp-enable-which-key-integration))
-    :config (setq lsp-completion-enable-additional-text-edit nil)
-    :commands (lsp lsp-deferred))
-(lsp-headerline-breadcrumb-mode nil)
+          (use-package lsp-mode
+            :init
+            (setq lsp-keymap-prefix "C-l") ;; or "C-c l", "s-l"
+            :hook ((typescript-mode . lsp-deferred)
+                   (lsp-mode . lsp-enable-which-key-integration))
+            :config
+            (setq lsp-completion-enable-additional-text-edit nil
+                  lsp-headerline-breadcrumb-enable nil
+                  lsp-completion-show-detail t)
+            :commands (lsp lsp-deferred))
 #+end_src 
 
 You can start LSP server in a java project by using ~C-c l s s~. Once you type ~C-c l~ ~which-key~ package should guide you through rest of the options. In above setting I have added some memory management settings as suggested in [[https://emacs-lsp.github.io/lsp-mode/page/performance/][this guide]]. Change them to higher numbers, if you find *lsp-mode* sluggish in your computer.

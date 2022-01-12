@@ -796,11 +796,12 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 *** Java
 This is the package that handles server installation and session management.
 #+begin_src emacs-lisp :tangle yes
-(use-package gradle-mode)
-(use-package lsp-java
+(use-package lsp-java :config (add-hook 'java-mode-hook 'lsp))
+(add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+(use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+(require 'dap-java)
+(use-package gradle-mode
   :config
-  (add-hook 'java-mode-hook 'lsp)
-  (require 'dap-java)
   (gradle-mode 1))
 #+end_src** Java
   

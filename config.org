@@ -314,6 +314,11 @@ If the new path's directories does not exist, create them."
     (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
     map))
 #+end_src
+** Emoji
+#+begin_src emacs-lisp :tangle yes
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+#+end_src
 * Org mode
 Org Mode is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 ** Better Font Faces

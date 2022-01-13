@@ -864,6 +864,15 @@ This is the package that handles server installation and session management.
   (use-package lsp-mode :hook (css-ls . lsp-deferred))
 #+end_src
 
+*** Python
+#+begin_src emacs-lisp :tangle yes
+(use-package python-mode)
+(use-package lsp-pyright
+  :after python-mode
+  :ensure t
+  :hook (python-mode . lsp-deferred))
+(require 'dap-python)
+#+end_src
 *** Rust
 #+begin_src emacs-lisp :tangle yes
   (use-package rust-mode

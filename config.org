@@ -764,11 +764,23 @@ Magit is the best Git interface I’ve ever used. Common Git operations are easy
   (use-package forge
     :after magit)
 #+end_src
+** Git Gutter
+#+begin_src emacs-lisp :tangle yes
+(use-package git-gutter
+  :config
+  (global-git-gutter-mode +1))
+#+end_src
 ** Commenting
 Emacs’ built in commenting functionality comment-dwim (usually bound to M-;) doesn’t always comment things in the way you might expect so we use evil-nerd-commenter to provide a more familiar behavior. I’ve bound it to M-/ since other editors sometimes use this binding but you could also replace Emacs’ M-; binding with this command.
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-nerd-commenter
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+#+end_src
+** Formatter
+#+begin_src emacs-lisp :tangle yes
+(use-package format-all)
+;; Format on save for most programming languages
+(add-hook 'prog-mode-hook 'format-all-mode)
 #+end_src
 ** Rainbow Delimiters
 rainbow-delimiters is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth. This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.

@@ -834,14 +834,25 @@ This is the package that handles server installation and session management.
   (gradle-mode 1))
 #+end_src** Java
   
+*** JSON
+#+begin_src emacs-lisp :tangle yes
+(use-package json-mode
+  :hook (json-mode . lsp-deferred))
+#+end_src
 *** Typescript
 #+begin_src emacs-lisp :tangle yes
-  (use-package typescript-mode
-    :mode "\\.ts\\'"
-    :hook (typescript-mode . lsp-deferred)
-    :config
-    (setq typescript-indent-level 2)
-    (require 'dap-firefox)) ;; to load the dap adapter for your language
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :hook ((typescript-mode . tide-setup)
+          (typescript-mode . tide-hl-identifier-mode)
+          (before-save . tide-format-before-save))
+  :config
+  (setq typescript-indent-level 2)
+  (require 'dap-firefox)) ;; to load the dap adapter for your language
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck))
 #+end_src 
 *** HTML
 #+begin_src emacs-lisp :tangle yes

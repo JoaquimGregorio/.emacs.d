@@ -685,17 +685,27 @@ lsp-ui is a set of UI enhancements built on top of lsp-mode which make Emacs fee
 Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package dap-mode
-  ;; Uncomment the config below if you want all UI panes to be hidden by default!
-  ;; :custom
-  ;; (lsp-enable-dap-auto-configure nil)
-  :config
+  (use-package dap-mode
+    :commands dap-debug)
+
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra)))
+
+  ;; Enabling only some features
+  ;; (setq dap-auto-configure-features '(sessions locals controls tooltip))
+
+  ;; Or if you want to enable only specific modes instead:
+  (dap-mode 1)
+  ;; The modes below are optional
   (dap-ui-mode 1)
-  :commands dap-debug
-  :config
-  ;; Set up Node debugging
-  (require 'dap-node)
-  (dap-node-setup)) ;; Automatically installs Node debug adapter if needed
+  ;; enables mouse hover support
+  (dap-tooltip-mode 1)
+  ;; use tooltips for mouse hover
+  ;; if it is not enabled `dap-mode' will use the minibuffer.
+  (tooltip-mode 1)
+  ;; displays floating panel with debug buttons
+  ;; requies emacs 26+
+  (dap-ui-controls-mode 1)
 #+end_src
 
 ** Company

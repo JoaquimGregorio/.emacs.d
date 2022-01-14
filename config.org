@@ -806,6 +806,8 @@ Emacs’ built in commenting functionality comment-dwim (usually bound to M-;) d
 (use-package format-all)
 ;; Format on save for most programming languages
 (add-hook 'prog-mode-hook 'format-all-mode)
+;; To ensure a formatter is set whenever `format-all-mode` is enabled
+(add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
 #+end_src
 ** Rainbow Delimiters
 rainbow-delimiters is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth. This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.

@@ -813,6 +813,10 @@ rainbow-delimiters is useful in programming modes because it colorizes nested pa
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
+** Auto pairs
+#+begin_src emacs-lisp :tangle yes
+(electric-pair-mode)
+#+end_src
 ** Install LSP Package
 Let's install the main package for lsp. Here we will integrate lsp with which-key. This way, when we type the prefix key ~C-c l~ we get additional help for compliting the command. 
 

@@ -18,3 +18,4 @@ config.el
 config.elc
 forge-database.sqlite
 emacs-backup/
+url/

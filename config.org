@@ -90,6 +90,11 @@ If the new path's directories does not exist, create them."
 (setq evil-split-window-below t)
 (evil-mode))
 (use-package evil-tutor)
+(use-package evil-collection
+  :after (evil)
+  :config
+  (setq evil-collection-mode-list '(dired)) ;; for dired work properly
+  (evil-collection-init))
 #+end_src
 
 * UI

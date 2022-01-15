@@ -364,7 +364,7 @@ The efs/org-font-setup function configures various text faces to tweak the sizes
   (visual-line-mode 1))
 #+end_src
 ** Basic Config
-This section contains the basic configuration for org-mode plus the configuration for Org agendas and capture templates. There’s a lot to unpack in here so I’d recommend watching the videos for Part 5 and Part 6 for a full explanation.
+This section contains the basic configuration for org-mode plus the configuration for Org agendas and capture templates.
 #+begin_src emacs-lisp :tangle yes
 (use-package org
   :pin org
@@ -491,7 +491,7 @@ This section contains the basic configuration for org-mode plus the configuratio
   (efs/org-font-setup))
  #+end_src
 ** Nicer Heading Bullets
-org-bullets replaces the heading stars in org-mode buffers with nicer looking characters that you can control. Another option for this is org-superstar-mode which we may cover in a later video.
+org-bullets replaces the heading stars in org-mode buffers with nicer looking characters that you can control.
 #+begin_src emacs-lisp :tangle yes
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))

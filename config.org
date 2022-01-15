@@ -227,10 +227,10 @@ If the new path's directories does not exist, create them."
 ** Font Configuration
 
 #+begin_src emacs-lisp :tangle yes
-(set-face-attribute 'default nil :font "FiraCode NF" :height 100)
+(set-face-attribute 'default nil :font "Hack NF" :height 100)
 
 ;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "FiraCode NF" :height 100)
+(set-face-attribute 'fixed-pitch nil :font "Hack NF" :height 100)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil :font "Hack NF" :height 100)
@@ -344,7 +344,7 @@ The efs/org-font-setup function configures various text faces to tweak the sizes
 		   (org-level-6 . 1.1)
 		   (org-level-7 . 1.1)
 		   (org-level-8 . 1.1)))
-     (set-face-attribute (car face) nil :font "FiraCode NF" :height (cdr face)))
+     (set-face-attribute (car face) nil :font "JetBrainsMono NF" :height (cdr face)))
 
    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)

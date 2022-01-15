@@ -1077,6 +1077,26 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
                                   ("mkv" . "mpv"))))
 
 #+end_src
+* PDF
+#+begin_src emacs-lisp :tangle yes
+(use-package pdf-tools
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :magic ("%PDF" . pdf-view-mode)
+  :init (pdf-view-mode)
+  :config
+  (pdf-tools-install)
+
+  (setq-default pdf-view-display-size 'fit-page)
+  ;; Enable hiDPI support, but at the cost of memory! See politza/pdf-tools#51
+  (setq pdf-view-use-scaling t
+        pdf-view-use-imagemagick nil)
+
+  ;; The mode-line does serve any useful purpose is annotation windows
+  (add-hook 'pdf-annot-list-mode-hook #'hide-mode-line-mode)
+
+(use-package saveplace-pdf-view
+  :after pdf-view)
+#+end_src>
 * Runtime Performance
 
 Dial the GC threshold back down so that garbage collection happens more frequently but in less time.

@@ -7,28 +7,59 @@
 For the first time you must save *config.org* file to be generated a *config.el* file. Since the auto-tangle is enabled, any change you do in the *config.org* file will rewrite the *config.el* file.
 #+begin_example emacs-lisp
 (defconst dot-emacs (concat (getenv "HOME") "/.emacs.d/" "config.el")
-    "My dot emacs file")
- 
+  "My dot emacs file")
+
 (require 'bytecomp)
 (setq compiled-dot-emacs (byte-compile-dest-file dot-emacs))
- 
+
 (if (or (not (file-exists-p compiled-dot-emacs))
 	(file-newer-than-file-p dot-emacs compiled-dot-emacs)
         (equal (nth 4 (file-attributes dot-emacs)) (list 0 0)))
     (load dot-emacs)
   (load compiled-dot-emacs))
- 
+
 (add-hook 'kill-emacs-hook
           '(lambda () (and (file-newer-than-file-p dot-emacs compiled-dot-emacs)
                            (byte-compile-file dot-emacs))))
 
-(setq message-log-max t)
+(defun loadup-gen ()
+  "Generate the lines to include in the lisp/loadup.el file
+to place all of the libraries that are loaded by your InitFile
+into the main dumped emacs"
+  (interactive)
+  (defun get-loads-from-*Messages* ()
+    (save-excursion
+      (let ((retval ()))
+	(set-buffer "*Messages*")
+	(beginning-of-buffer)
+	(while (search-forward-regexp "^Loading " nil t)
+	  (let ((start (point)))
+	    (search-forward "...")
+	    (backward-char 3)
+	    (setq retval (cons (buffer-substring-no-properties start (point)) retval))))
+	retval))))
+
+(loadup-gen)
+
+;; time the loading of the .emacs
+;; keep this on top of your .emacs
+(defvar *emacs-load-start* (current-time))
+(defun anarcat/time-to-ms (time)
+  (+ (* (+ (* (car time) (expt 2 16)) (car (cdr time))) 1000000) (car (cdr (cdr time)))))
+(defun anarcat/display-timing ()
+  (message ".emacs loaded in %fms" (/ (- (anarcat/time-to-ms (current-time)) (anarcat/time-to-ms *emacs-load-start*)) 1000000.0)))
+(add-hook 'after-init-hook 'anarcat/display-timing t)
 #+end_example
 * Load First
 ** Startup performance
 #+begin_src emacs-lisp :tangle yes
-;; The default is 800 kilobytes. Measured in bytes.
-(setq gc-cons-threshold (* 50 1000 1000))
+;; Minimize garbage collection during startup
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Lower threshold back to 8 MiB (default is 800kB)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (expt 2 23))))
 
 (defun efs/display-startup-time ()
 (message "Emacs loaded in %s with %d garbage collections."
@@ -38,7 +69,6 @@ For the first time you must save *config.org* file to be generated a *config.el*
         gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
-
 #+end_src
 ** Initialize Package Sources 
 #+begin_src emacs-lisp :tangle yes
@@ -82,19 +112,21 @@ If the new path's directories does not exist, create them."
 ** Evil Mode
 
 #+begin_src emacs-lisp :tangle yes
-(use-package evil
-:init      ;; tweak evil's configuration before loading it
-(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-(setq evil-want-keybinding nil)
-(setq evil-vsplit-window-right t)
-(setq evil-split-window-below t)
-(evil-mode))
-(use-package evil-tutor)
-(use-package evil-collection
-  :after (evil)
-  :config
-  (setq evil-collection-mode-list '(dired)) ;; for dired work properly
-  (evil-collection-init))
+  (use-package evil
+  :defer t
+  :init      ;; tweak evil's configuration before loading it
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  (setq evil-vsplit-window-right t)
+  (setq evil-split-window-below t)
+  (evil-mode))
+  (use-package evil-tutor)
+  (use-package evil-collection
+    :defer t
+    :after (evil)
+    :config
+    (setq evil-collection-mode-list '(dired)) ;; for dired work properly
+    (evil-collection-init))
 #+end_src
 
 * UI

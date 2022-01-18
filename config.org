@@ -134,7 +134,7 @@ If the new path's directories does not exist, create them."
 #+begin_src emacs-lisp :tangle yes
 ;; If the dashboard doesn`t word after init, create ~/Org/{Tasks.org,Birthdays.org,Habits.org} files
 (use-package dashboard
-  :ensure t
+  :defer nil
   :config
   (setq dashboard-items '((recents . 5)
                     (projects . 4)
@@ -150,122 +150,124 @@ If the new path's directories does not exist, create them."
 #+end_src
 ** Centaur tabs
 #+begin_src emacs-lisp :tangle yes
-(use-package centaur-tabs
-  :config
-     (setq centaur-tabs-style "bar"
-            centaur-tabs-height 24
-            centaur-tabs-set-icons t
-            centaur-tabs-set-modified-marker t
-            centaur-tabs-close-button "✕"
-            centaur-tabs-modified-marker "•"
-            centaur-tabs-set-bar 'over
-            x-underline-at-descent-line t)
-     (centaur-tabs-headline-match)
-     ;; (setq centaur-tabs-gray-out-icons 'buffer)
-     ;; (centaur-tabs-enable-buffer-reordering)
-     ;; (setq centaur-tabs-adjust-buffer-order t)
-     (centaur-tabs-mode t)
-     (setq uniquify-separator "/")
-     (setq uniquify-buffer-name-style 'forward)
-     (defun centaur-tabs-buffer-groups ()
-       "`centaur-tabs-buffer-groups' control buffers' group rules.
+  (use-package centaur-tabs
+    :defer t
+    :config
+       (setq centaur-tabs-style "bar"
+              centaur-tabs-height 24
+              centaur-tabs-set-icons t
+              centaur-tabs-set-modified-marker t
+              centaur-tabs-close-button "✕"
+              centaur-tabs-modified-marker "•"
+              centaur-tabs-set-bar 'over
+              x-underline-at-descent-line t)
+       (centaur-tabs-headline-match)
+       ;; (setq centaur-tabs-gray-out-icons 'buffer)
+       ;; (centaur-tabs-enable-buffer-reordering)
+       ;; (setq centaur-tabs-adjust-buffer-order t)
+       (centaur-tabs-mode t)
+       (setq uniquify-separator "/")
+       (setq uniquify-buffer-name-style 'forward)
+       (defun centaur-tabs-buffer-groups ()
+         "`centaur-tabs-buffer-groups' control buffers' group rules.
 
-   Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-   All buffer name start with * will group to \"Emacs\".
-   Other buffer group by `centaur-tabs-get-group-name' with project name."
-       (list
-        (cond
-          ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
-          ;; "Remote")
-          ((or (string-equal "*" (substring (buffer-name) 0 1))
-               (memq major-mode '(magit-process-mode
-                                  magit-status-mode
-                                  magit-diff-mode
-                                  magit-log-mode
-                                  magit-file-mode
-                                  magit-blob-mode
-                                  magit-blame-mode
-                                  )))
-           "Emacs")
-          ((derived-mode-p 'prog-mode)
-           "Editing")
-          ((derived-mode-p 'dired-mode)
-           "Dired")
-          ((memq major-mode '(helpful-mode
-                              help-mode))
-           "Help")
-          ((memq major-mode '(org-mode
-                              org-agenda-clockreport-mode
-                              org-src-mode
-                              org-agenda-mode
-                              org-beamer-mode
-                              org-indent-mode
-                              org-bullets-mode
-                              org-cdlatex-mode
-                              org-agenda-log-mode
-                              diary-mode))
-           "OrgMode")
-          (t
-           (centaur-tabs-get-group-name (current-buffer))))))
-  :hook
-  (dashboard-mode . centaur-tabs-local-mode)
-  (term-mode . centaur-tabs-local-mode)
-  (vterm-mode . centaur-tabs-local-mode)
-  (calendar-mode . centaur-tabs-local-mode)
-  (org-mode . centaur-tabs-local-mode)
-  (org-agenda-mode . centaur-tabs-local-mode)
-  (helpful-mode . centaur-tabs-local-mode)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward)
-  ("C-c t s" . centaur-tabs-counsel-switch-group)
-  ("C-c t p" . centaur-tabs-group-by-projectile-project)
-  ("C-c t g" . centaur-tabs-group-buffer-groups)
-  (:map evil-normal-state-map
-         ("g t" . centaur-tabs-forward)
-         ("g T" . centaur-tabs-backward)))
+     Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+     All buffer name start with * will group to \"Emacs\".
+     Other buffer group by `centaur-tabs-get-group-name' with project name."
+         (list
+          (cond
+            ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
+            ;; "Remote")
+            ((or (string-equal "*" (substring (buffer-name) 0 1))
+                 (memq major-mode '(magit-process-mode
+                                    magit-status-mode
+                                    magit-diff-mode
+                                    magit-log-mode
+                                    magit-file-mode
+                                    magit-blob-mode
+                                    magit-blame-mode
+                                    )))
+             "Emacs")
+            ((derived-mode-p 'prog-mode)
+             "Editing")
+            ((derived-mode-p 'dired-mode)
+             "Dired")
+            ((memq major-mode '(helpful-mode
+                                help-mode))
+             "Help")
+            ((memq major-mode '(org-mode
+                                org-agenda-clockreport-mode
+                                org-src-mode
+                                org-agenda-mode
+                                org-beamer-mode
+                                org-indent-mode
+                                org-bullets-mode
+                                org-cdlatex-mode
+                                org-agenda-log-mode
+                                diary-mode))
+             "OrgMode")
+            (t
+             (centaur-tabs-get-group-name (current-buffer))))))
+    :hook
+    (dashboard-mode . centaur-tabs-local-mode)
+    (term-mode . centaur-tabs-local-mode)
+    (vterm-mode . centaur-tabs-local-mode)
+    (calendar-mode . centaur-tabs-local-mode)
+    (org-mode . centaur-tabs-local-mode)
+    (org-agenda-mode . centaur-tabs-local-mode)
+    (helpful-mode . centaur-tabs-local-mode)
+    :bind
+    ("C-<prior>" . centaur-tabs-backward)
+    ("C-<next>" . centaur-tabs-forward)
+    ("C-c t s" . centaur-tabs-counsel-switch-group)
+    ("C-c t p" . centaur-tabs-group-by-projectile-project)
+    ("C-c t g" . centaur-tabs-group-buffer-groups)
+    (:map evil-normal-state-map
+           ("g t" . centaur-tabs-forward)
+           ("g T" . centaur-tabs-backward)))
 
-  (global-set-key (kbd "C-x t e") #'centaur-tabs-mode)
+    (global-set-key (kbd "C-x t e") #'centaur-tabs-mode)
 #+end_src
 ** hl-todo
 #+begin_src emacs-lisp :tangle yes
-  (use-package hl-todo
-    :config
-    (setq hl-todo-highlight-punctuation ":"
-          hl-todo-keyword-faces
-          `(;; For things that need to be done, just not today.
-            ("TODO" warning bold)
-            ;; For problems that will become bigger problems later if not
-            ;; fixed ASAP.
-            ("FIXME" error bold)
-            ;; For tidbits that are unconventional and not intended uses of the
-            ;; constituent parts, and may break in a future update.
-            ("HACK" font-lock-constant-face bold)
-            ;; For things that were done hastily and/or hasn't been thoroughly
-            ;; tested. It may not even be necessary!
-            ("REVIEW" font-lock-keyword-face bold)
-            ;; For especially important gotchas with a given implementation,
-            ;; directed at another user other than the author.
-            ("NOTE" success bold)
-            ;; For things that just gotta go and will soon be gone.
-            ("DEPRECATED" font-lock-doc-face bold)
-            ;; For a known bug that needs a workaround
-            ("BUG" error bold)
-            ;; For warning about a problematic or misguiding code
-            ("XXX" font-lock-constant-face bold))))
+    (use-package hl-todo
+      :defer t
+      :config
+      (setq hl-todo-highlight-punctuation ":"
+            hl-todo-keyword-faces
+            `(;; For things that need to be done, just not today.
+              ("TODO" warning bold)
+              ;; For problems that will become bigger problems later if not
+              ;; fixed ASAP.
+              ("FIXME" error bold)
+              ;; For tidbits that are unconventional and not intended uses of the
+              ;; constituent parts, and may break in a future update.
+              ("HACK" font-lock-constant-face bold)
+              ;; For things that were done hastily and/or hasn't been thoroughly
+              ;; tested. It may not even be necessary!
+              ("REVIEW" font-lock-keyword-face bold)
+              ;; For especially important gotchas with a given implementation,
+              ;; directed at another user other than the author.
+              ("NOTE" success bold)
+              ;; For things that just gotta go and will soon be gone.
+              ("DEPRECATED" font-lock-doc-face bold)
+              ;; For a known bug that needs a workaround
+              ("BUG" error bold)
+              ;; For warning about a problematic or misguiding code
+              ("XXX" font-lock-constant-face bold))))
 
-(global-hl-todo-mode)
+  (global-hl-todo-mode)
 #+end_src
 ** Font Configuration
 
 #+begin_src emacs-lisp :tangle yes
-(set-face-attribute 'default nil :font "Hack NF" :height 100)
+(set-face-attribute 'default nil :font "Hack NF" :height 105)
 
 ;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Hack NF" :height 100)
+(set-face-attribute 'fixed-pitch nil :font "Hack NF" :height 105)
 
 ;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Hack NF" :height 100)
+(set-face-attribute 'variable-pitch nil :font "Hack NF" :height 105)
 
 ;; Emoji: 😄, 🤦, 🏴󠁧󠁢󠁳󠁣󠁴󠁿
 (set-fontset-font t 'symbol "Noto Color Emoji")
@@ -281,6 +283,9 @@ If the new path's directories does not exist, create them."
   (set-fringe-mode 10) ; Give some breathing room
   (menu-bar-mode -1) ; Disable the menu bar
   (setq visible-bell t) ; Set up the visible bell
+
+  ;; Disable all GUI popups and tooltips
+  (setq use-dialog-box nil)
 
   ;; Wrap words
   (add-hook 'text-mode-hook 'visual-line-mode)
@@ -315,12 +320,12 @@ If the new path's directories does not exist, create them."
 #+begin_src emacs-lisp :tangle yes
 ;; Set up some theme
 (use-package doom-themes
-  :ensure t
+  :defer nil
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -334,16 +339,17 @@ If the new path's directories does not exist, create them."
 #+end_src
 *** Doom
 #+begin_src emacs-lisp :tangle yes
-  (use-package all-the-icons)
+  (use-package all-the-icons :defer t)
 
   ;; Doom mode line
   (use-package doom-modeline
+    :defer t
     :init (doom-modeline-mode 1))
 #+end_src
 
 ** Yafolding
 #+begin_src emacs-lisp :tangle yes
-  (use-package yafolding)
+  (use-package yafolding :defer t)
   (defvar yafolding-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "<C-S-return>") #'yafolding-hide-parent-element)
@@ -353,8 +359,9 @@ If the new path's directories does not exist, create them."
 #+end_src
 ** Emoji
 #+begin_src emacs-lisp :tangle yes
-(use-package emojify
-  :hook (after-init . global-emojify-mode))
+  (use-package emojify
+    :defer t
+    :hook (after-init . global-emojify-mode))
 #+end_src
 * Org mode
 Org Mode is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
@@ -398,137 +405,139 @@ The efs/org-font-setup function configures various text faces to tweak the sizes
 ** Basic Config
 This section contains the basic configuration for org-mode plus the configuration for Org agendas and capture templates.
 #+begin_src emacs-lisp :tangle yes
-(use-package org
-  :pin org
-  :commands (org-capture org-agenda)
-  :hook (org-mode . efs/org-mode-setup)
-  :config
-  (setq org-ellipsis " ▾")
+  (use-package org
+    :defer t
+    :pin org
+    :commands (org-capture org-agenda)
+    :hook (org-mode . efs/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
 
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
 
-  (setq org-agenda-files
-        '("~/Org/Tasks.org"
-          "~/Org/Habits.org"
-          "~/Org/Birthdays.org"))
+    (setq org-agenda-files
+          '("~/Org/Tasks.org"
+            "~/Org/Habits.org"
+            "~/Org/Birthdays.org"))
 
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
 
-  (setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+    (setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+        (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-  (setq org-refile-targets
-    '(("Archive.org" :maxlevel . 1)
-      ("Tasks.org" :maxlevel . 1)))
+    (setq org-refile-targets
+      '(("Archive.org" :maxlevel . 1)
+        ("Tasks.org" :maxlevel . 1)))
 
-  ;; Save Org buffers after refiling!
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+    ;; Save Org buffers after refiling!
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-  (setq org-tag-alist
-    '((:startgroup)
-       ; Put mutually exclusive tags here
-       (:endgroup)
-       ("@errand" . ?E)
-       ("@home" . ?H)
-       ("@work" . ?W)
-       ("agenda" . ?a)
-       ("planning" . ?p)
-       ("publish" . ?P)
-       ("batch" . ?b)
-       ("note" . ?n)
-       ("idea" . ?i)))
+    (setq org-tag-alist
+      '((:startgroup)
+         ; Put mutually exclusive tags here
+         (:endgroup)
+         ("@errand" . ?E)
+         ("@home" . ?H)
+         ("@work" . ?W)
+         ("agenda" . ?a)
+         ("planning" . ?p)
+         ("publish" . ?P)
+         ("batch" . ?b)
+         ("note" . ?n)
+         ("idea" . ?i)))
 
-  ;; Configure custom agenda views
-  (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+    ;; Configure custom agenda views
+    (setq org-agenda-custom-commands
+     '(("d" "Dashboard"
+       ((agenda "" ((org-deadline-warning-days 7)))
+        (todo "NEXT"
+          ((org-agenda-overriding-header "Next Tasks")))
+        (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))))
+      ("n" "Next Tasks"
+       ((todo "NEXT"
+          ((org-agenda-overriding-header "Next Tasks")))))
 
-    ("W" "Work Tasks" tags-todo "+work-email")
+      ("W" "Work Tasks" tags-todo "+work-email")
 
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
+      ;; Low-effort next actions
+      ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+       ((org-agenda-overriding-header "Low Effort Tasks")
+        (org-agenda-max-todos 20)
+        (org-agenda-files org-agenda-files)))
 
-    ("w" "Workflow Status"
-     ((todo "WAIT"
-            ((org-agenda-overriding-header "Waiting on External")
-             (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-            ((org-agenda-overriding-header "In Review")
-             (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-            ((org-agenda-overriding-header "In Planning")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
-            ((org-agenda-overriding-header "Project Backlog")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "READY"
-            ((org-agenda-overriding-header "Ready for Work")
-             (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
-            ((org-agenda-overriding-header "Active Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-            ((org-agenda-overriding-header "Completed Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "CANC"
-            ((org-agenda-overriding-header "Cancelled Projects")
-             (org-agenda-files org-agenda-files)))))))
+      ("w" "Workflow Status"
+       ((todo "WAIT"
+              ((org-agenda-overriding-header "Waiting on External")
+               (org-agenda-files org-agenda-files)))
+        (todo "REVIEW"
+              ((org-agenda-overriding-header "In Review")
+               (org-agenda-files org-agenda-files)))
+        (todo "PLAN"
+              ((org-agenda-overriding-header "In Planning")
+               (org-agenda-todo-list-sublevels nil)
+               (org-agenda-files org-agenda-files)))
+        (todo "BACKLOG"
+              ((org-agenda-overriding-header "Project Backlog")
+               (org-agenda-todo-list-sublevels nil)
+               (org-agenda-files org-agenda-files)))
+        (todo "READY"
+              ((org-agenda-overriding-header "Ready for Work")
+               (org-agenda-files org-agenda-files)))
+        (todo "ACTIVE"
+              ((org-agenda-overriding-header "Active Projects")
+               (org-agenda-files org-agenda-files)))
+        (todo "COMPLETED"
+              ((org-agenda-overriding-header "Completed Projects")
+               (org-agenda-files org-agenda-files)))
+        (todo "CANC"
+              ((org-agenda-overriding-header "Cancelled Projects")
+               (org-agenda-files org-agenda-files)))))))
 
-  (setq org-capture-templates
-    `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/Org/Tasks.org" "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+    (setq org-capture-templates
+      `(("t" "Tasks / Projects")
+        ("tt" "Task" entry (file+olp "~/Org/Tasks.org" "Inbox")
+             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-      ("j" "Journal Entries")
-      ("jj" "Journal" entry
-           (file+olp+datetree "~/Org/Journal.org")
-           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-           :clock-in :clock-resume
-           :empty-lines 1)
-      ("jm" "Meeting" entry
-           (file+olp+datetree "~/Org/Journal.org")
-           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
+        ("j" "Journal Entries")
+        ("jj" "Journal" entry
+             (file+olp+datetree "~/Org/Journal.org")
+             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+             ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+             :clock-in :clock-resume
+             :empty-lines 1)
+        ("jm" "Meeting" entry
+             (file+olp+datetree "~/Org/Journal.org")
+             "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+             :clock-in :clock-resume
+             :empty-lines 1)
 
-      ("w" "Workflows")
-      ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
-           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+        ("w" "Workflows")
+        ("we" "Checking Email" entry (file+olp+datetree "~/Org/Journal.org")
+             "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-      ("m" "Metrics Capture")
-      ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
-       "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+        ("m" "Metrics Capture")
+        ("mw" "Weight" table-line (file+headline "~/Org/Metrics.org" "Weight")
+         "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
-  (define-key global-map (kbd "C-c j")
-    (lambda () (interactive) (org-capture nil "jj")))
+    (define-key global-map (kbd "C-c j")
+      (lambda () (interactive) (org-capture nil "jj")))
 
-  (efs/org-font-setup))
+    (efs/org-font-setup))
  #+end_src
 ** Nicer Heading Bullets
 org-bullets replaces the heading stars in org-mode buffers with nicer looking characters that you can control.
 #+begin_src emacs-lisp :tangle yes
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode))
-  ;; :custom
-  ;; (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (use-package org-bullets
+    :defer t
+    :hook (org-mode . org-bullets-mode))
+    ;; :custom
+    ;; (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 ** Center Org Buffers
 
@@ -598,62 +607,66 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 * Ivy
 
 #+begin_src emacs-lisp :tangle yes
-    ;; Use Ivy and Counsel for completions
-    (use-package ivy
-      :diminish
-      :bind (("C-s" . swiper)
-	     :map ivy-minibuffer-map
-	     ("TAB" . ivy-alt-done)	
-	     ("C-l" . ivy-alt-done)
-	     ("C-j" . ivy-next-line)
-	     ("C-k" . ivy-previous-line)
-	     :map ivy-switch-buffer-map
-	     ("C-k" . ivy-previous-line)
-	     ("C-l" . ivy-done)
-	     ("C-d" . ivy-switch-buffer-kill)
-	     :map ivy-reverse-i-search-map
-	     ("C-k" . ivy-previous-line)
-	     ("C-d" . ivy-reverse-i-search-kill))
-      :config
-      (ivy-mode 1)
-      (setq ivy-use-virtual-buffers t)
-      (setq ivy-wrap t)
-      (setq ivy-count-format "(%d/%d) ")
-      (setq enable-recursive-minibuffers t)
+  ;; Use Ivy and Counsel for completions
+  (use-package ivy
+    :defer t
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)	
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-wrap t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq enable-recursive-minibuffers t)
 
-      ;; Use different regex strategies per completion command
-      (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist)
-      (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
-      (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
+    ;; Use different regex strategies per completion command
+    (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist)
+    (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
+    (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
 
-      ;; Set minibuffer height for different commands
-      (setf (alist-get 'swiper ivy-height-alist) 15)
-      (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7))
+    ;; Set minibuffer height for different commands
+    (setf (alist-get 'swiper ivy-height-alist) 15)
+    (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7))
 
-    (use-package counsel
-      :init
-      ;; :bind (("M-x" . counsel-M-x)
-      ;;        ("C-x b" . counsel-ibuffer)
-      ;;        ("C-x C-f" . counsel-find-file)
-      ;;        ("C-M-j" . 'counsel-switch-buffer)
-      ;;        :map minibuffer-local-map
-      ;;        ("C-r" . 'counsel-minibuffer-history))
-      :custom
-      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-      :config
-      (counsel-mode 1)
-      (setq ivy-initial-inputs-alist nil))  ;; Don't start searches with ^
+  (use-package counsel
+    :defer t
+    :init
+    :bind (("M-x" . counsel-M-x)
+           ("C-x b" . counsel-ibuffer)
+           ("C-x C-f" . counsel-find-file)
+           ("C-M-j" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :custom
+    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+    :config
+    (counsel-mode 1)
+    (setq ivy-initial-inputs-alist nil))  ;; Don't start searches with ^
 
-     ;; Ivy rich
-     (use-package ivy-rich
-       :init
-       (ivy-rich-mode 1))
+   ;; Ivy rich
+   (use-package ivy-rich
+     :defer t
+     :init
+     (ivy-rich-mode 1))
 #+end_src
 
 * Which key
 #+begin_src emacs-lisp :tangle yes
   ;; Which key
   (use-package which-key
+    :defer t
     :init (which-key-mode)
     :diminish which-key-mode
     :config
@@ -664,7 +677,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helpful
-    :ensure t
+    :defer t
     :custom
     (counsel-describe-function-function #'helpful-callable)
     (counsel-describe-variable-function #'helpful-variable)
@@ -681,7 +694,7 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 We can use quickrun package to execute code (if it has main). E.g. If you have a java file with main method, it will run with the associated shortcut key ~C-c r~ or quickrun command. Quickrun has support for several languages.
 #+begin_src emacs-lisp :tangle yes
 (use-package quickrun 
-:ensure t
+:defer t
 :bind ("C-c r" . quickrun))
 #+end_src
 
@@ -689,8 +702,8 @@ We can use quickrun package to execute code (if it has main). E.g. If you have a
 Yasnippet is a template system for Emacs. It allows you to type abbreviation and complete the associated text.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package yasnippet :config (yas-global-mode))
-(use-package yasnippet-snippets :ensure t)
+(use-package yasnippet :defer t)
+(use-package yasnippet-snippets :defer t)
 #+end_src
 
 E.g. In java mode, if you type ~pr~ and hit ~<TAB>~ it should complete to ~System.out.println("text");~
@@ -701,19 +714,20 @@ To create a new snippet you can use ~yas-new-snippet~ command.
 Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and its dependency treemacs. We will also Assign ~M-9~ to show error list.
 #+begin_src emacs-lisp :tangle yes
   (use-package lsp-treemacs
+    :defer t
     :after (lsp-mode treemacs)
-    :ensure t
     :commands lsp-treemacs-errors-list
     :bind (:map lsp-mode-map
            ("M-9" . lsp-treemacs-errors-list)))
 
   (use-package treemacs
-    :ensure t
+    :defer t
     :commands (treemacs)
     :after (lsp-mode))
 
-  (use-package treemacs-all-the-icons)
-  (treemacs-load-theme "all-the-icons")
+  (use-package treemacs-all-the-icons
+    :defer t
+    :config (treemacs-load-theme "all-the-icons"))
 
   (global-set-key (kbd "M-n") 'treemacs)
 #+end_src
@@ -721,24 +735,27 @@ Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and it
 ** LSP UI
 lsp-ui is a set of UI enhancements built on top of lsp-mode which make Emacs feel even more like an IDE. Check out the screenshots on the lsp-ui homepage (linked at the beginning of this paragraph) to see examples of what it can do.
 #+begin_src emacs-lisp :tangle yes
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'at-point)) ;; or bottom, top
+  (use-package lsp-ui
+    :defer t
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom)) ;; or at-point, top
 
 #+end_src
 ** Ivy
 #+begin_src emacs-lisp :tangle yes
-(use-package lsp-ivy
-  :after lsp)
+  (use-package lsp-ivy
+    :defer t
+    :after lsp)
 #+end_src
 ** Dap Mode
 Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package dap-mode
-    :commands dap-debug)
-
+(use-package dap-mode
+  :defer t
+  :commands dap-debug
+  :config
   (add-hook 'dap-stopped-hook
             (lambda (arg) (call-interactively #'dap-hydra)))
 
@@ -756,31 +773,33 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
   (tooltip-mode 1)
   ;; displays floating panel with debug buttons
   ;; requies emacs 26+
-  (dap-ui-controls-mode 1)
+  (dap-ui-controls-mode 1))
 #+end_src
 
 ** Company
 Complete anything aka Company provides auto-completion. Company-capf is enabled by default when you start LSP on a project. You can also invoke ~M-x company-capf~ to enable capf (completion at point function).
 #+begin_src emacs-lisp :tangle yes
-(use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-         ("<tab>" . company-complete-selection))
-        (:map lsp-mode-map
-         ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+  (use-package company
+    :defer t
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+           ("<tab>" . company-complete-selection))
+          (:map lsp-mode-map
+           ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))
+  (use-package company-box
+    :defer t
+    :hook (company-mode . company-box-mode))
 #+end_src
-
 ** Projectile
 Projectile is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages. Many packages integrate with Projectile so it’s a good idea to have it installed even if you don’t use its commands directly.
 #+begin_src emacs-lisp :tangle yes
   (use-package projectile
+    :defer t
     :diminish projectile-mode
     :config (projectile-mode)
     :custom ((projectile-completion-system 'ivy))
@@ -803,6 +822,7 @@ Projectile is a project management library for Emacs which makes it a lot easier
 Magit is the best Git interface I’ve ever used. Common Git operations are easy to execute quickly using Magit’s command panel system.
 #+begin_src emacs-lisp :tangle yes
   (use-package magit
+    :defer t
     :commands magit-status
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
@@ -813,23 +833,26 @@ Magit is the best Git interface I’ve ever used. Common Git operations are easy
   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
   (use-package forge
+    :defer t
     :after magit)
 #+end_src
 ** Git Gutter
 #+begin_src emacs-lisp :tangle yes
-(use-package git-gutter
-  :config
-  (global-git-gutter-mode +1))
+  (use-package git-gutter
+    :defer t
+    :config
+    (global-git-gutter-mode +1))
 #+end_src
 ** Commenting
 Emacs’ built in commenting functionality comment-dwim (usually bound to M-;) doesn’t always comment things in the way you might expect so we use evil-nerd-commenter to provide a more familiar behavior. I’ve bound it to M-/ since other editors sometimes use this binding but you could also replace Emacs’ M-; binding with this command.
 #+begin_src emacs-lisp :tangle yes
-(use-package evil-nerd-commenter
-  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+  (use-package evil-nerd-commenter
+    :defer t
+    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 #+end_src
 ** Formatter
 #+begin_src emacs-lisp :tangle yes
-(use-package format-all)
+(use-package format-all :defer t)
 ;; Format on save for most programming languages
 (add-hook 'prog-mode-hook 'format-all-mode)
 ;; To ensure a formatter is set whenever `format-all-mode` is enabled
@@ -838,8 +861,9 @@ Emacs’ built in commenting functionality comment-dwim (usually bound to M-;) d
 ** Rainbow Delimiters
 rainbow-delimiters is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth. This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
 #+begin_src emacs-lisp :tangle yes
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :defer t
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 ** Auto pairs
 #+begin_src emacs-lisp :tangle yes
@@ -849,17 +873,17 @@ rainbow-delimiters is useful in programming modes because it colorizes nested pa
 Let's install the main package for lsp. Here we will integrate lsp with which-key. This way, when we type the prefix key ~C-c l~ we get additional help for compliting the command. 
 
 #+begin_src emacs-lisp :tangle yes
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-l") ;; or "C-c l", "s-l"
-  :hook ((typescript-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :config
-  (setq lsp-completion-enable-additional-text-edit nil
-        lsp-headerline-breadcrumb-enable nil
-        lsp-completion-show-detail t
-        lsp-ui-doc-enable nil)
-  :commands (lsp lsp-deferred))
+  (use-package lsp-mode
+    :defer t
+    :init
+    (setq lsp-keymap-prefix "C-c l") ;; or "C-c l", "s-l"
+    :hook (lsp-mode . lsp-enable-which-key-integration)
+    :config
+    (setq lsp-completion-enable-additional-text-edit nil
+          lsp-headerline-breadcrumb-enable nil
+          lsp-completion-show-detail t
+          lsp-ui-doc-enable nil)
+    :commands (lsp lsp-deferred))
 #+end_src 
 
 You can start LSP server in a java project by using ~C-c l s s~. Once you type ~C-c l~ ~which-key~ package should guide you through rest of the options. In above setting I have added some memory management settings as suggested in [[https://emacs-lsp.github.io/lsp-mode/page/performance/][this guide]]. Change them to higher numbers, if you find *lsp-mode* sluggish in your computer.
@@ -867,9 +891,12 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 ** Emmet mode
 
 #+begin_src emacs-lisp :tangle yes
-(use-package emmet-mode)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+  (use-package emmet-mode
+    :defer t
+    :config
+    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+  )
 #+end_src
 
 ** Languages
@@ -877,14 +904,17 @@ You can start LSP server in a java project by using ~C-c l s s~. Once you type ~
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-mode
   :hook ((angular-ls . lsp-deferred)
-         (angular-ls . tree-sitter-hl-mode)))
+         (angular-ls . tree-sitter-hl-mode)
+         (angular-ls . yas-global-mode)))
 #+end_src
 *** Java
 This is the package that handles server installation and session management.
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-java
+  :defer t
   :hook ((java-mode . lsp-deferred)
-         (java-mode . tree-sitter-hl-mode))
+         (java-mode . tree-sitter-hl-mode)
+         (java-mode . yas-global-mode))
   :config
   (add-hook 'java-mode-hook 'lsp)
   (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode))
@@ -897,63 +927,76 @@ This is the package that handles server installation and session management.
   
 *** JSON
 #+begin_src emacs-lisp :tangle yes
-(use-package json-mode
-  :hook ((json-mode . lsp-deferred)
-         (json-mode . tree-sitter-hl-mode)))
+  (use-package json-mode
+    :defer t
+    :hook ((json-mode . lsp-deferred)
+           (json-mode . tree-sitter-hl-mode)
+           (json-mode . yas-global-mode)))
 #+end_src
 *** Typescript
 #+begin_src emacs-lisp :tangle yes
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook ((typescript-mode . tide-setup)
-          (typescript-mode . tide-hl-identifier-mode)
-          (typescript-mode . tree-sitter-hl-mode)
-          (before-save . tide-format-before-save))
-  :config
-  (setq typescript-indent-level 2)
-  (require 'dap-firefox)) ;; to load the dap adapter for your language
+  (use-package typescript-mode
+    :defer t
+    :mode "\\.ts\\'"
+    :hook ((typescript-mode . tide-setup)
+            (typescript-mode . tide-hl-identifier-mode)
+            (typescript-mode . tree-sitter-hl-mode)
+            (typescript-mode . yas-global-mode)
+            (before-save . tide-format-before-save))
+    :config
+    (setq typescript-indent-level 2)
+    (require 'dap-firefox)) ;; to load the dap adapter for your language
 
-(use-package tide
-  :ensure t
-  :after (typescript-mode company flycheck))
+  (use-package tide
+    :defer t
+    :after (typescript-mode company flycheck))
 #+end_src 
 *** HTML
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-mode
   :hook ((html-ls . lsp-deferred)
-         (html-ls . tree-sitter-hl-mode)))
+         (html-ls . tree-sitter-hl-mode)
+         (html-ls . yas-global-mode)))
 #+end_src
 *** CSS/LessCSS/SASS/SCSS
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-mode
   :hook ((css-ls . lsp-deferred)
-         (css-ls . tree-sitter-hl-mode)))
+         (css-ls . tree-sitter-hl-mode)
+         (css-ls . yas-global-mode)))
 #+end_src
 
 *** Python
 #+begin_src emacs-lisp :tangle yes
-(use-package python-mode)
-(use-package lsp-pyright
-  :after python-mode
-  :ensure t
-  :hook ((python-mode . lsp-deferred)
-         (python-mode . tree-sitter-hl-mode))
-  :config (require 'dap-python))
+ (use-package python-mode)
+   :defer t
+   (use-package lsp-pyright
+     :after python-mode
+     :defer t
+     :hook ((python-mode . lsp-deferred)
+            (python-mode . company-mode)
+            (python-mode . tree-sitter-hl-mode)
+            (python-mode . yas-global-mode))
+     :config (require 'dap-python))
 #+end_src
 *** Rust
 #+begin_src emacs-lisp :tangle yes
-(use-package rust-mode
-  :hook ((rust-mode . lsp-deferred)
-        (rust-mode . tree-sitter-hl-mode))
-  :config (setq rust-format-on-save t))
-(add-hook 'rust-mode-hook (lambda () (setq indent-tabs-mode nil)))
+  (use-package rust-mode
+    :defer t
+    :hook ((rust-mode . lsp-deferred)
+          (rust-mode . tree-sitter-hl-mode)
+          (rust-mode . yas-global-mode))
+    :config (setq rust-format-on-save t))
+  (add-hook 'rust-mode-hook (lambda () (setq indent-tabs-mode nil)))
 #+end_src
 ** Tree-sitter
 #+begin_src emacs-lisp :tangle yes
-(use-package tree-sitter
-  :after lsp-mode)
-(use-package tree-sitter-langs
-  :after tree-sitter)
+  (use-package tree-sitter
+    :defer t
+    :after (lsp-mode rainbow-delimiters ivy counsel ivy-rich))
+  (use-package tree-sitter-langs
+    :defer t
+    :after tree-sitter)
 #+end_src
 * Terminals
 ** term-mode
@@ -973,12 +1016,13 @@ Run a terminal with =M-x term!=
 - If you have =evil-collection= installed, =term-mode= will enter char mode when you use Evil's Insert mode
 
 #+begin_src emacs-lisp :tangle yes
-(use-package term
-  :commands term
-  :config
-  (setq explicit-shell-file-name "fish") ;; Change this to zsh, etc
-  ;; Match the default Bash shell prompt.  Update this if you have a custom prompt
-  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
+  (use-package term
+    :defer t
+    :commands term
+    :config
+    (setq explicit-shell-file-name "fish") ;; Change this to zsh, etc
+    ;; Match the default Bash shell prompt.  Update this if you have a custom prompt
+    (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
 #+end_src
 
 *** Better term-mode colors
@@ -998,12 +1042,13 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
 Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirements][necessary dependencies]] installed before trying to use =vterm= because there is a module that will need to be compiled before you can use it successfully.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package vterm
-  :commands vterm
-  :config
-  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")  ;; Set this to match your custom shell prompt
-  (setq vterm-shell "fish")                       ;; Set this to customize the shell to launch
-  (setq vterm-max-scrollback 10000))
+  (use-package vterm
+    :defer t
+    :commands vterm
+    :config
+    (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")  ;; Set this to match your custom shell prompt
+    (setq vterm-shell "fish")                       ;; Set this to customize the shell to launch
+    (setq vterm-max-scrollback 10000))
 #+end_src
 * File Management
 ** Dired
@@ -1071,18 +1116,21 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 #+begin_src emacs-lisp :tangle yes
 
   (use-package dired
-    :ensure nil
+    :defer t
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first")))
 
   (use-package dired-single
+    :defer t
     :commands (dired dired-jump))
 
   (use-package all-the-icons-dired
+    :defer t
     :hook (dired-mode . all-the-icons-dired-mode))
 
   (use-package dired-open
+    :defer t
     :commands (dired dired-jump)
     :config
     ;; Doesn't work as expected!
@@ -1094,6 +1142,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 * PDF
 #+begin_src emacs-lisp :tangle yes
 (use-package pdf-tools
+  :defer t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
   :init (pdf-view-mode)
@@ -1109,17 +1158,8 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
   (add-hook 'pdf-annot-list-mode-hook #'hide-mode-line-mode)
 
 (use-package saveplace-pdf-view
+  :defer t
   :after pdf-view)
 #+end_src>
-* Runtime Performance
-
-Dial the GC threshold back down so that garbage collection happens more frequently but in less time.
-
-#+begin_src emacs-lisp :tangle yes
-
-  ;; Make gc pauses faster by decreasing the threshold.
-  (setq gc-cons-threshold (* 2 1000 1000))
-
-#+end_src
 * Comments
   - ~M-x package-refresh-contents~ can be used to refresh (m)elpa packages if (m)elpa cannot find some package.

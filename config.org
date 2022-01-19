@@ -600,8 +600,8 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 ;; Adjust text scale
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-=") 'text-scale-increase)
+;;(global-set-key (kbd "C--") 'text-scale-decrease)
+;;(global-set-key (kbd "C-=") 'text-scale-increase)
 
 ;; See keybindings
 (use-package command-log-mode)

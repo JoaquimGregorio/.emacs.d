@@ -46,8 +46,10 @@ into the main dumped emacs"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("c4063322b5011829f7fdd7509979b5823e8eea2abf1fe5572ec4b7af1dd78519" "9b4ae6aa7581d529e20e5e503208316c5ef4c7005be49fdb06e5d07160b67adc" "9f218080c0526490543e9ce0dc539c092b1777872930d96a0585cf11caaff842" "cf922a7a5c514fad79c483048257c5d8f242b21987af0db813d3f0b138dfaf53" default))
  '(package-selected-packages
-   '(dired zones yasnippet-snippets yafolding which-key vterm visual-fill-column use-package unicode-escape treemacs-all-the-icons tree-sitter-langs tide saveplace-pdf-view rust-mode rainbow-delimiters quickrun python-mode pdf-tools org-bullets no-littering lsp-ui lsp-python-ms lsp-pyright lsp-jedi lsp-java lsp-ivy latex-preview-pane latex-math-preview latex-extra json-mode ivy-rich hl-todo highlight-indent-guides helpful helm-lsp gradle-mode git-gutter format-all forge evil-tutor evil-nerd-commenter evil-collection eterm-256color emojify emmet-mode doom-themes doom-modeline diredfl dired-single dired-open dired-hide-dotfiles dashboard counsel-projectile company-box command-log-mode centaur-tabs auto-package-update all-the-icons-dired)))
+   '(dired atom-dark-theme vs-dark-theme yasnippet-snippets yafolding which-key vterm vscode-dark-plus-theme use-package treemacs-all-the-icons tree-sitter-langs tide rust-mode rainbow-delimiters quickrun python-mode org-bullets lsp-ui lsp-pyright lsp-ivy lorem-ipsum json-mode ivy-rich hl-todo helpful git-gutter format-all forge evil-tutor evil-nerd-commenter evil-collection emojify emmet-mode doom-themes doom-modeline dired-single dired-open dashboard dap-mode counsel-projectile company-box command-log-mode centaur-tabs all-the-icons-ivy all-the-icons-dired)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

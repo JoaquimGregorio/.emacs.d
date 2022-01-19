@@ -971,16 +971,16 @@ This is the package that handles server installation and session management.
 
 *** Python
 #+begin_src emacs-lisp :tangle yes
- (use-package python-mode)
-   :defer t
-   (use-package lsp-pyright
-     :after python-mode
-     :defer t
-     :hook ((python-mode . lsp-deferred)
-            (python-mode . company-mode)
-            (python-mode . tree-sitter-hl-mode)
-            (python-mode . yas-global-mode))
-     :config (require 'dap-python))
+(use-package python-mode)
+  :defer t
+  (use-package lsp-pyright
+    :after python-mode
+    :defer t
+    :hook ((python-mode . lsp-deferred)
+           (python-mode . company-mode)
+           (python-mode . tree-sitter-hl-mode)
+           (python-mode . yas-global-mode))
+    :config (require 'dap-python))
 #+end_src
 *** Rust
 #+begin_src emacs-lisp :tangle yes

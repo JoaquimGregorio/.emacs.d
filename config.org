@@ -268,16 +268,23 @@ If the new path's directories does not exist, create them."
 ** Font Configuration
 
 #+begin_src emacs-lisp :tangle yes
-(set-face-attribute 'default nil :font "JetBrainsMono NF" :height 105)
+  (defun efs/set-font-faces ()
+    (message "Setting faces!")
+    (set-face-attribute 'default nil :font "FiraCode NF" :height 105)
 
-;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "JetBrainsMono NF" :height 105)
+    ;; Set the fixed pitch face
+    (set-face-attribute 'fixed-pitch nil :font "FiraCode NF" :height 105)
 
-;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "JetBrainsMono NF" :height 105)
+    ;; Set the variable pitch face
+    (set-face-attribute 'variable-pitch nil :font "FiraCode NF" :height 105))
 
-;; Emoji: 😄, 🤦, 🏴󠁧󠁢󠁳󠁣󠁴󠁿
-(set-fontset-font t 'symbol "Noto Color Emoji")
+  (if (daemonp)
+          (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                (setq doom-modeline-icon t)
+                (with-selected-frame frame
+                    (efs/set-font-faces))))
+      (efs/set-font-faces))
 #+end_src
 
 ** Ui Improvements

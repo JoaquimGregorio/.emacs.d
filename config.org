@@ -661,9 +661,11 @@ This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config
     :defer t
     :init
     :bind (("M-x" . counsel-M-x)
-           ("C-x b" . counsel-ibuffer)
+           ;; ("C-x b" . counsel-ibuffer)
+           ("C-x b" . counsel-switch-buffer)
            ("C-x C-f" . counsel-find-file)
-           ("C-M-j" . 'counsel-switch-buffer)
+           ;; ("C-M-j" . 'counsel-switch-buffer)
+           ("C-M-j" . 'counsel-ibuffer)
            :map minibuffer-local-map
            ("C-r" . 'counsel-minibuffer-history))
     :custom

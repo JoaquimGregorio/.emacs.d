@@ -576,7 +576,8 @@ To execute or export code in org-mode code blocks, you’ll need to set up org-b
   (org-babel-do-load-languages
       'org-babel-load-languages
       '((emacs-lisp . t)
-      (python . t)))
+      (python . t)
+      (C . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
 #+end_src

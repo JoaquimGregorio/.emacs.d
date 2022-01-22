@@ -1138,20 +1138,24 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
   (use-package dired
     :defer t
+    :ensure nil
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
     :custom ((dired-listing-switches "-agho --group-directories-first")))
 
   (use-package dired-single
     :defer t
+    :ensure nil
     :commands (dired dired-jump))
 
   (use-package all-the-icons-dired
     :defer t
+    :ensure nil
     :hook (dired-mode . all-the-icons-dired-mode))
 
   (use-package dired-open
     :defer t
+    :ensure nil
     :commands (dired dired-jump)
     :config
     ;; Doesn't work as expected!

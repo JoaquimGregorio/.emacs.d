@@ -901,7 +901,8 @@ Let's install the main package for lsp. Here we will integrate lsp with which-ke
     (setq lsp-completion-enable-additional-text-edit nil
           lsp-headerline-breadcrumb-enable nil
           lsp-completion-show-detail t
-          lsp-ui-doc-enable nil)
+          lsp-ui-doc-enable t)
+    (define-key lsp-mode-map (kbd "C-SPC") #'company-complete)
     :commands (lsp lsp-deferred))
 #+end_src 
 

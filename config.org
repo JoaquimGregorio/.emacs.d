@@ -1003,6 +1003,7 @@ This is the package that handles server installation and session management.
 #+begin_src emacs-lisp :tangle yes
   (use-package rust-mode
     :defer t
+    :after dap-mode
     :hook ((rust-mode . lsp-deferred)
           (rust-mode . tree-sitter-hl-mode)
           (rust-mode . yas-global-mode))

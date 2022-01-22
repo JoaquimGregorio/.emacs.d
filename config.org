@@ -152,6 +152,8 @@ If the new path's directories does not exist, create them."
         dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name
         dashboard-week-agenda nil)
     (dashboard-setup-startup-hook))
+    ;; Mandatory to get dashboard when using `emacsclient -c`
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 ** Centaur tabs
 #+begin_src emacs-lisp :tangle yes

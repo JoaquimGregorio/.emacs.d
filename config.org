@@ -593,9 +593,7 @@ You can add more src block templates below by copying one of the lines and chang
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
-  (add-to-list 'org-structure-template-alist '("ts" . "src typescript")))
+  (add-to-list 'org-structure-template-alist '("cc" . "src C")))
 #+end_src
 ** Auto-tangle Configuration Files
 This snippet adds a hook to org-mode buffers so that efs/org-babel-tangle-config gets executed each time such a buffer gets saved. This function checks to see if the file being saved is the Emacs.org file you’re looking at right now, and if so, automatically exports the configuration here to the associated output files.

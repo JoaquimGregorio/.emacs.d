@@ -46,11 +46,9 @@ into the main dumped emacs"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("234dbb732ef054b109a9e5ee5b499632c63cc24f7c2383a849815dacc1727cb6" "82ef0ab46e2e421c4bcbc891b9d80d98d090d9a43ae76eb6f199da6a0ce6a348" "c4063322b5011829f7fdd7509979b5823e8eea2abf1fe5572ec4b7af1dd78519" "9b4ae6aa7581d529e20e5e503208316c5ef4c7005be49fdb06e5d07160b67adc" "9f218080c0526490543e9ce0dc539c092b1777872930d96a0585cf11caaff842" "cf922a7a5c514fad79c483048257c5d8f242b21987af0db813d3f0b138dfaf53" default))
- '(org-babel-load-languages '((emacs-lisp . t) (python . t) (C . t)))
+ '(format-all-formatters '(("Java" astyle)) t)
  '(package-selected-packages
-   '(visual-fill-column lsp-java go-complete go-mode doom-themes dired yasnippet-snippets yafolding which-key vterm use-package treemacs-all-the-icons tree-sitter-langs tide rust-mode rainbow-delimiters quickrun python-mode org-bullets lsp-ui lsp-pyright lsp-ivy lorem-ipsum json-mode ivy-rich hl-todo helpful git-gutter format-all forge evil-tutor evil-nerd-commenter evil-collection emojify emmet-mode doom-modeline dired-single dired-open dashboard dap-mode counsel-projectile company-box command-log-mode centaur-tabs all-the-icons-ivy all-the-icons-dired)))
+   '(pyvenv saveplace-pdf-view pdf-tools vterm lsp-pyright python-mode tree-sitter-langs tree-sitter emmet-mode rainbow-delimiters format-all evil-nerd-commenter git-gutter forge magit counsel-projectile projectile company-box company dap-mode lsp-ivy lsp-ui treemacs-all-the-icons lsp-treemacs yasnippet-snippets yasnippet quickrun yafolding which-key visual-fill-column use-package org-mime org-bullets ivy-rich hl-todo helpful evil-tutor evil-collection emojify doom-themes doom-modeline dashboard counsel command-log-mode centaur-tabs)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

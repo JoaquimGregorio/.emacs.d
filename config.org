@@ -159,7 +159,8 @@ If the new path's directories does not exist, create them."
 ** Centaur tabs
 #+begin_src emacs-lisp :tangle yes
   (use-package centaur-tabs
-    :defer t
+    ;;:defer t
+    :ensure t
     :config
        (setq centaur-tabs-style "bar"
               centaur-tabs-height 24
@@ -338,7 +339,7 @@ If the new path's directories does not exist, create them."
 #+begin_src emacs-lisp :tangle yes
 ;;Set up some theme
 (use-package doom-themes
-  :defer 1
+  ;;:defer t
   :ensure t
   :config
   ;; Global settings (defaults)

@@ -2,5 +2,5 @@
 #+begin_src sh
 git clone https://github.com/JoaquimGregorio/.emacs.d
 #+end_src
-** Settings are made by editing the [[https://github.com/JoaquimGregorio/.emacs.d/blob/main/config.org][config.org]] file.
+** Settings are made by editing the [[https://github.com/jgsn13/.emacs.d/blob/main/config.org][config.org]] file.
 ** That's all.

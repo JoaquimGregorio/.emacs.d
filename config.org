@@ -1,7 +1,6 @@
 #+TITLE: GNU Emacs Config
 #+AUTHOR: Joaquim Gregório
 #+DESCRIPTION: My personal Emacs config.
-#+STARTUP: overview
 
 * Important! Put this in your init.el 
 For the first time you must save *config.org* file to be generated a *config.el* file. Since the auto-tangle is enabled, any change you do in the *config.org* file will rewrite the *config.el* file.
@@ -272,15 +271,15 @@ If the new path's directories does not exist, create them."
 #+begin_src emacs-lisp :tangle yes
   (defun efs/set-font-faces ()
     (message "Setting faces!")
-    (set-face-attribute 'default nil :font "FiraCode NF" :weight 'regular :height 105)
+    (set-face-attribute 'default nil :font "JetBrainsMono NF" :weight 'regular :height 105)
     (set-face-attribute 'bold nil :font "JetBrainsMono NF" :weight 'bold)
-    (set-face-attribute 'italic nil :font "VictorMono NF" :weight 'light :slant 'italic)
+    (set-face-attribute 'italic nil :font "JetBrainsMono NF" :weight 'light :slant 'italic)
  
     ;; Set the fixed pitch face
-    (set-face-attribute 'fixed-pitch nil :font "FiraCode NF" :height 105)
+    (set-face-attribute 'fixed-pitch nil :font "JetBrainsMono NF" :height 105)
 
     ;; Set the variable pitch face
-    (set-face-attribute 'variable-pitch nil :font "FiraCode NF" :height 105))
+    (set-face-attribute 'variable-pitch nil :font "JetBrainsMono NF" :height 105))
 
   (if (daemonp)
           (add-hook 'after-make-frame-functions
@@ -1008,6 +1007,19 @@ This is the package that handles server installation and session management.
   (use-package tide
     ;;:defer t
     :after (typescript-mode company flycheck))
+#+end_src 
+*** Prettier
+#+begin_src emacs-lisp :tangle yes
+  (use-package prettier-js
+    ;;:defer t
+    :config
+        (add-hook 'js2-mode-hook 'prettier-js-mode)
+        (add-hook 'web-mode-hook 'prettier-js-mode)
+        (setq prettier-js-args '(
+            "--trailing-comma" "es5"
+            "--print-width" "80"
+            "--single-quote"
+        )))
 #+end_src 
 *** HTML
 #+begin_src emacs-lisp :tangle yes

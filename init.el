@@ -48,7 +48,7 @@ into the main dumped emacs"
  ;; If there is more than one, they won't work right.
  '(format-all-formatters '(("Java" astyle)) t)
  '(package-selected-packages
-   '(lua-mode all-the-icons-dired rust-mode tide typescript-mode json-mode pyvenv saveplace-pdf-view pdf-tools vterm lsp-pyright python-mode tree-sitter-langs tree-sitter emmet-mode rainbow-delimiters format-all evil-nerd-commenter git-gutter forge magit counsel-projectile projectile company-box company dap-mode lsp-ivy lsp-ui treemacs-all-the-icons lsp-treemacs yasnippet-snippets yasnippet quickrun yafolding which-key visual-fill-column use-package org-mime org-bullets ivy-rich hl-todo helpful evil-tutor evil-collection emojify doom-themes doom-modeline dashboard counsel command-log-mode centaur-tabs)))
+   '(prettier-js pytest pyvenv-auto eldoc-toml toml toml-mode lua-mode all-the-icons-dired rust-mode tide typescript-mode json-mode pyvenv saveplace-pdf-view pdf-tools vterm lsp-pyright python-mode tree-sitter-langs tree-sitter emmet-mode rainbow-delimiters format-all evil-nerd-commenter git-gutter forge magit counsel-projectile projectile company-box company dap-mode lsp-ivy lsp-ui treemacs-all-the-icons lsp-treemacs yasnippet-snippets yasnippet quickrun yafolding which-key visual-fill-column use-package org-mime org-bullets ivy-rich hl-todo helpful evil-tutor evil-collection emojify doom-themes doom-modeline dashboard counsel command-log-mode centaur-tabs)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
